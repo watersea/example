@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+			<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>图片本地预览</title>
+		<script>
+		    	;(function (doc, win, undefined) {
+		            var docEl = doc.documentElement,
+		              resizeEvt = 'orientationchange' in win? 'orientationchange' : 'resize',
+		              recalc = function () {
+		                var clientWidth = docEl.clientWidth;
+		                if (clientWidth === undefined) return;
+		                docEl.style.fontSize = 50 * (clientWidth / 375) + 'px';
+		              };
+		            if (doc.addEventListener === undefined) return;
+		            win.addEventListener(resizeEvt, recalc, false);
+		            doc.addEventListener('DOMContentLoaded', recalc, false)
+		          })(document, window);
+    </script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js">  </script>
+    	<script type="text/javascript" src="imgup.js"></script>
+    <style>
+    	html,body{
+    		font-size: 16px;
+    	}
+    			.warpper{
+    				width:100%;
+    				height: 200px;
+    				overflow: auto;
+    				border: 1px solid #ccc;
+    				border-radius: 6px;
+    				outline: none;
+    				font-size: 14px;
+    				padding: .2rem;
+    				box-sizing: border-box;
+    				line-height: 25px;
+    			}
+    			.btn,.result{
+    				position: relative;
+    				width:1.4rem;
+    				height:.6rem;
+    				text-align: center;
+    				line-height: .6rem;
+    				background: #FFA10D;
+    				color:#000;
+    				border-radius: 6px;
+    				margin-top: .4rem;
+    				padding:  0 .2rem;
+    				font-size: 12px;
+    			}
+    			.upload{
+    				position: absolute;
+    				top: 0;
+    				left: 0;
+    				opacity: 0;
+    				float:left;
+    				width:100%;
+    				height:100% ;
+    			}
+    			.warpper img{
+    				
+    				width:100%;
+    				height:4rem;
+    				vertical-align: top;
+    				margin: .2rem 0;
+    				word-break: break-word;
+    			}
+    </style>
+	</head>
+	<body>
+			<!--input  输入框调用本地摄像头，accept的接受对象可以调节是限定视频还是拍照-->
+			<!--<input type="file"  capture="camera" accept="image/*,video/*" name="" value="" >-->
+			<div contenteditable="true" class="warpper"></div>
+			<!--<textarea name="" rows="" cols="" id= 'textarea'  placeholder="请输入您想说的话........."></textarea>-->
+			<div class="btn">
+				插入图片
+				<input type="file" class='upload'  />
+			</div>
+		<div class='result'>获取</div>
+		<p class='text'></p>
+	</body>
+	<script type="text/javascript">
+					$('.upload').on('change',function(e){
+							var file = e.target.files[0]
+						if( file  !== 'undefined '){
+							var  type = file.type;
+							var  reg =/image\/(gif|jpg|jpeg|GIF|JPG|JPEG|png)/;
+							if(!type.match(reg)){ 
+							        alert("上传文件必须为图片！"); 
+							        return false; 
+							    }else{
+							    		var render = new FileReader()
+									render.readAsDataURL(file);
+									render.onload = function(e){ 
+									    $('.warpper').append('<img src='+this.result+'>');			    
+							 		 } 
+							    }
+							}else{
+								return false
+							}
+//						var str =	readAsBinaryString(file)
+//						console.log(str)
+					})
+$('.result').click(function(){
+	var html =  $('.warpper').html();
+	console.log(html)
+//		document.write(html)
+})
+//电脑端可以用canvas实现截取视频的第一帧，在手机会会出现bug，在iOS手机上时视频不会自动播放，所以截取到的视频第一帧是空白的
+
+//视频在微信iOS手机上自动播放的需要先加载完微信jsApi 视频默认格式修改用video.js来修改
+	</script>
+</html>
